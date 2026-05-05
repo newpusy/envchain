@@ -1,0 +1,11 @@
+node_modules/
+
+.next/
+.parcel-cache/
+build/
+.cache/
+yarn-debug.log*
+Thumbs.db
+yarn-error.log*
+coverage/
+dist/
