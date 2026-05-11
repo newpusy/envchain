@@ -31,6 +31,12 @@ describe('startProfile / stop', () => {
     startProfile('validate').stop();
     expect(getProfiles()).toHaveLength(3);
   });
+
+  test('stop returns the same entry that appears in getProfiles', () => {
+    const entry = startProfile('check').stop();
+    const profiles = getProfiles();
+    expect(profiles[0]).toEqual(entry);
+  });
 });
 
 describe('getProfiles', () => {
@@ -62,6 +68,13 @@ describe('summarizeProfiles', () => {
     expect(summary.parse.count).toBe(1);
     expect(typeof summary.load.totalMs).toBe('number');
     expect(typeof summary.load.avgMs).toBe('number');
+  });
+
+  test('avgMs equals totalMs divided by count', () => {
+    startProfile('load').stop();
+    startProfile('load').stop();
+    const summary = summarizeProfiles();
+    expect(summary.load.avgMs).toBeCloseTo(summary.load.totalMs / summary.load.count);
   });
 
   test('returns empty object when no profiles', () => {
