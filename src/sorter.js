@@ -61,6 +61,9 @@ function sortEnvBy(env, comparator) {
  * @returns {Object}
  */
 function filterByPrefix(env, prefix) {
+  if (typeof prefix !== 'string' || prefix.length === 0) {
+    throw new TypeError('prefix must be a non-empty string');
+  }
   const result = {};
   for (const [key, value] of Object.entries(env)) {
     if (key.startsWith(prefix)) {
@@ -70,4 +73,26 @@ function filterByPrefix(env, prefix) {
   return result;
 }
 
-module.exports = { sortEnv, groupByPrefix, sortEnvBy, filterByPrefix };
+/**
+ * Rename all keys matching a prefix by replacing it with a new prefix
+ * @param {Object} env
+ * @param {string} oldPrefix
+ * @param {string} newPrefix
+ * @returns {Object}
+ */
+function renamePrefix(env, oldPrefix, newPrefix) {
+  if (typeof oldPrefix !== 'string' || oldPrefix.length === 0) {
+    throw new TypeError('oldPrefix must be a non-empty string');
+  }
+  if (typeof newPrefix !== 'string') {
+    throw new TypeError('newPrefix must be a string');
+  }
+  const result = {};
+  for (const [key, value] of Object.entries(env)) {
+    const newKey = key.startsWith(oldPrefix) ? newPrefix + key.slice(oldPrefix.length) : key;
+    result[newKey] = value;
+  }
+  return result;
+}
+
+module.exports = { sortEnv, groupByPrefix, sortEnvBy, filterByPrefix, renamePrefix };
