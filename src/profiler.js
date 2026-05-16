@@ -65,4 +65,15 @@ function summarizeProfiles() {
   return summary;
 }
 
-module.exports = { startProfile, getProfiles, clearProfiles, summarizeProfiles };
+/**
+ * Get the slowest recorded profile entry, or null if no profiles exist
+ * @returns {ProfileEntry | null}
+ */
+function getSlowest() {
+  if (profiles.length === 0) return null;
+  return profiles.reduce((slowest, entry) =>
+    entry.durationMs > slowest.durationMs ? entry : slowest
+  );
+}
+
+module.exports = { startProfile, getProfiles, clearProfiles, summarizeProfiles, getSlowest };
